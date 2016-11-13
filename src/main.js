@@ -1,14 +1,26 @@
 import { Test } from './test';
 
-class Main {
-  constructor(deps) {
-    this.test = deps;
-  }
+class Base {
+    constructor() {
+        this.deps = dependencies
+    }
+}
+
+class Main extends Base {
+  // constructor(deps) {
+  //     super();
+  //     this.test = deps;
+  // }
 
   runMethod() {
-    this.test.runTest();
+      // console.dir(this.deps.test);
+      this.deps.test.runTest();
   }
 }
 
-const main = new Main(new Test());
+const dependencies = {
+    test: new Test()
+};
+
+const main = new Main();
 main.runMethod();

@@ -1,8 +1,16 @@
 import { Test } from './test';
+// var Test = require('./test');
 
 class Base {
     constructor() {
-        this.deps = dependencies
+        this.deps = this.createDeps();
+    }
+
+    createDeps() {
+      const dependencies = {};
+      const instantiate = new Function('Dep', 'return new Dep();');
+      dependencies.test = instantiate(Test);
+      return dependencies;
     }
 }
 
@@ -13,14 +21,10 @@ class Main extends Base {
   // }
 
   runMethod() {
-      // console.dir(this.deps.test);
+      console.dir(this.deps.test);
       this.deps.test.runTest();
   }
 }
-
-const dependencies = {
-    test: new Test()
-};
 
 const main = new Main();
 main.runMethod();

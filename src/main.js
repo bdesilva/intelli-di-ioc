@@ -1,34 +1,25 @@
-// import Test from './test';
-const Test = require('./test').Test;
-
 class IntelliDI {
-    constructor() {
+    constructor(dependencies) {
         this.deps = {};
-        this.createDeps();
+        this.createDeps(dependencies);
     }
 
-    createDeps() {
-        const dep = 'test';
+    createDeps(dep) {
         const Dep = eval(`require("./${dep}").Test`);
-        console.log(Dep);
         const instantiate = new Function('Dep', 'return new Dep();');
         this.deps.test = instantiate(Dep);
     }
 }
 
 class Main extends IntelliDI {
-  constructor(deps) {
-      super();
-      this.test = deps.test;
+  constructor(dependencies) {
+      super(dependencies);
   }
 
   runMethod() {
-      console.log(this.test);
-      // this.deps.test.runTest();
-      // const test = new Test();
-      // test.runTest();
+      this.deps.test.runTest();
   }
 }
 
-const main = new Main();
+const main = new Main('test');
 main.runMethod();

@@ -1,45 +1,32 @@
-var SystemJS = require('systemjs');
-// import { Test } from './test';
-// var Test = require('./test');
+// import Test from './test';
+const Test = require('./test').Test;
 
-class Base {
+class IntelliDI {
     constructor() {
         this.deps = {};
-        this.createDeps2();        
+        this.createDeps();
     }
 
-    // createDeps() {
-    //   const dependencies = {};
-    //   const instantiate = new Function('Dep', 'return new Dep();');
-    //   dependencies.test = instantiate(Test);
-    //   return dependencies;
-    // }
-
-    async createDeps2() {      
-      // Promise.all(['./test']
-      //   .map(dep => System.import(dep)))
-      // .then([])
-      try {
-        console.log('in createDeps2 before try');
-        let Test = await SystemJS.import('./test');
-        console.log('in createDeps2 after try');        
-        this.deps.test = new Test();
-        console.log(`Loaded test: ${this.deps.test}`);
-      } catch (err) {        
-        console.log(`Error: ${err}`);
-      }      
+    createDeps() {
+        const dep = 'test';
+        const Dep = eval(`require("./${dep}").Test`);
+        console.log(Dep);
+        const instantiate = new Function('Dep', 'return new Dep();');
+        this.deps.test = instantiate(Dep);
     }
 }
 
-class Main extends Base {
-  // constructor(deps) {
-  //     super();
-  //     this.test = deps;
-  // }
+class Main extends IntelliDI {
+  constructor(deps) {
+      super();
+      this.test = deps.test;
+  }
 
   runMethod() {
-      console.dir(this.deps.test);
-      this.deps.test.runTest();
+      console.log(this.test);
+      // this.deps.test.runTest();
+      // const test = new Test();
+      // test.runTest();
   }
 }
 

@@ -6,19 +6,27 @@ class IntelliDI {
 
     processDeps(dependencies) {
         dependencies.map(dep => {
-            this.createDeps(dep);
+            this.distinguishModules(dep);
         });
     }
 
     /* Filters between CommonJS modules and ES6 modules including default and named classes. */
-    distinguishModules(dependencies) {
-        return dependencies;
+    distinguishModules(dep) {
+        const instDep = eval(`require("./${dep.file}")`);
+        if ((!dep.name || dep.name.toLowerCase() === 'default') && instDep['default']) {
+          this.createDeps(instDep['default']);
+        } else if (dep.name) {
+          this.createDeps(instDep[dep.name]);
+        } else {
+          throw new Error(`Dependency: ${dep} does not exist!`);
+        }
     }
 
-    createDeps(dep) {
-        const Dep = eval(`require("./${dep.file}").${dep.name}`);
+    createDeps(dep) {        
+        // const Dep = eval(`require("./${dep.file}").${dep.name}`);
         const instantiate = new Function('Dep', 'return new Dep();');
-        this.deps[`${dep.name.toLowerCase()}`] = instantiate(Dep);
+        const instance = instantiate(dep);
+        this.deps[`${instance.constructor.name.toLowerCase()}`] = instance;
     }
 }
 
@@ -28,11 +36,14 @@ class Main extends IntelliDI {
   }
 
   runMethod() {
+      console.log(this.deps);
       this.deps.test.runTest();
+      this.deps.test2.runTest();      
   }
 }
 
 const main = new Main([
-    {file: '../test/test-classes/test.js', name: 'Test'}
+    {file: '../test/test-classes/test.js', name: 'Test'},
+    {file: '../test/test-classes/test.js'}
 ]);
 main.runMethod();

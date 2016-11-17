@@ -20,6 +20,7 @@ export class IntelliDI {
         } else if (dep.name) {
             this.createDeps(instDep[dep.name]);
         } else if (typeof(instDep) === 'function') {
+            //Add React logic
             this.createDeps(instDep);
         } else {
             throw new Error(`Dependency: ${dep} does not exist!`);

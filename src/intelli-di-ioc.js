@@ -1,13 +1,16 @@
 import React from 'react';
+import { StringExtensions } from './helpers/StringExtensions';
 
 export class IntelliDI {
     constructor(dependencies) {
         this.deps = {};
         this.processDeps(dependencies);
+        let s = new StringExtensions('hi');
+        console.log(s.toCamelCase());
     }
 
     processDeps(dependencies) {
-        dependencies.map(dep => {
+        dependencies.forEach(dep => {
             this.distinguishModules(dep);
         });
     }
@@ -15,20 +18,17 @@ export class IntelliDI {
     /* Filters between CommonJS modules and ES6 modules including default and named classes. */
     distinguishModules(dep) {
         const instDep = eval(`require("./${dep.file}")`);
-        console.log(instDep);
+        // console.log(instDep);
         //TODO: Refactor multiple if statement.
         if ((!dep.name || dep.name.toLowerCase() === 'default') && instDep['default']) {
-            (this.distinguishReactComponent(instDep['default']))
-            ? console.log('React component')
-            : this.createDeps(instDep['default']);
+            this.createDeps(instDep['default'],
+                this.distinguishReactComponent(instDep['default']));
         } else if (dep.name) {
-            (this.distinguishReactComponent(instDep[dep.name]))
-            ? console.log('React component')
-            : this.createDeps(instDep[dep.name]);
+            this.createDeps(instDep[dep.name],
+                this.distinguishReactComponent(instDep[dep.name]));
         } else if (typeof(instDep) === 'function') {
-            (this.distinguishReactComponent(instDep))
-            ? console.log('React component')
-            : this.createDeps(instDep);
+            this.createDeps(instDep,
+                this.distinguishReactComponent(instDep));
         } else {
             throw new Error(`Dependency: ${dep} does not exist!`);
         }
@@ -49,8 +49,6 @@ export class IntelliDI {
 
         const prototypeKeys = allObjectKeys(dep.prototype);
         const keys = allObjectKeys(dep);
-        console.log(`prototype keys: ${prototypeKeys}`);
-        console.log(`object keys: ${keys}`);
 
         if (arrIncludes(prototypeKeys, 'isReactComponent')
             || (arrIncludes(prototypeKeys, 'constructor') && arrIncludes(prototypeKeys, 'render'))
@@ -63,8 +61,14 @@ export class IntelliDI {
     }
 
     createDeps(dep, possiblyReact) {
-        const instantiate = new Function('Dep', 'return new Dep();');
-        const instance = instantiate(dep);
-        this.deps[`${instance.constructor.name.toLowerCase()}`] = instance;
+        if (!possiblyReact) {
+            const instantiate = new Function('Dep', 'return new Dep();');
+            const instance = instantiate(dep);
+            this.deps[`${instance.constructor.name.toLowerCase()}`] = instance;
+        } else {
+            (dep.name) ? console.log(dep.name.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""))
+                : console.log(dep.displayName.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""));
+            this.deps[`${dep.name.toLowerCase()}`] = dep;
+        }
     }
 }

@@ -1,12 +1,10 @@
 import React from 'react';
-import { StringExtensions } from './helpers/StringExtensions';
+import Helpers from './helpers';
 
 export class IntelliDI {
     constructor(dependencies) {
         this.deps = {};
         this.processDeps(dependencies);
-        let s = new StringExtensions('hi');
-        console.log(s.toCamelCase());
     }
 
     processDeps(dependencies) {
@@ -65,10 +63,10 @@ export class IntelliDI {
             const instantiate = new Function('Dep', 'return new Dep();');
             const instance = instantiate(dep);
             this.deps[`${instance.constructor.name.toLowerCase()}`] = instance;
-        } else {
-            (dep.name) ? console.log(dep.name.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""))
-                : console.log(dep.displayName.replace(/[.,\/#!$%\^&\*;:{}=\-_`~()]/g,""));
-            this.deps[`${dep.name.toLowerCase()}`] = dep;
+        } else {            
+            (dep.name)
+                ? this.deps[`${Helpers.toCamelCase(dep.name)}`] = dep
+                : this.deps[`${Helpers.toCamelCase(dep.displayName)}`] = dep;
         }
-    }
+    }   
 }

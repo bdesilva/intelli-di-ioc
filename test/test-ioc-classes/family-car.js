@@ -1,4 +1,4 @@
-export class SportsCar extends Vehicle {
+export class FamilyCar extends Vehicle {
     constructor(doors, make, model, bodyStyle) {
         this.doors = doors;
         this.make = make;
@@ -6,7 +6,7 @@ export class SportsCar extends Vehicle {
         super(bodyStyle);
     }
 
-    speed() {
-        console.log(`You are driving really fast!`);
+    relax() {
+        console.log(`You are driving really slow!`);
     }
 }

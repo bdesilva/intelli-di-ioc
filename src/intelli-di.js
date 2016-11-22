@@ -68,5 +68,5 @@ export default class IntelliDI {
                 ? this.deps[`${Helpers.toCamelCase(dep.name)}`] = dep
                 : this.deps[`${Helpers.toCamelCase(dep.displayName)}`] = dep;
         }
-    }   
+    }
 }

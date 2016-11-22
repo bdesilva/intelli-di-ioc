@@ -3,10 +3,10 @@ export class SportsCar extends Vehicle {
         this.doors = doors;
         this.make = make;
         this.model = model;
-        super(bodyStyle);
+        super(bodyStyle, make, model);
     }
 
     speed() {
-        console.log(`You are driving really fast!`);
+        console.log(`You are driving really fast in your ${this.make} ${this.model}!`);
     }
 }

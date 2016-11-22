@@ -5,16 +5,26 @@ export class Person {
     this.vehicle = this.deps.vehicleFactory.Create(this.personality);
   }
 
-  driveVehicle() {
+  get drivingStatus() {
+    return this.vehicle.status;
+  }
+
+  driveVehicle() {    
+    console.log(`${this.name} is driving a ${this.vehicle.drive()}`);
+
     switch (this.personality.toLowerCase()) {
       case 'sporty': {
-        console.log(`${this.name} is driving a ${this.deps.sportsCar.drive()}`);
+        this.vehicle.speed();
         break;
       }
       case 'family': {
-        console.log(`${this.name} is driving a ${this.deps.familyCar.drive()}`);
+        this.vehicle.relax();
         break;
       }
     }
+  }
+
+  parkVehicle() {
+    console.log(`${this.name} is driving a ${this.vehicle.park()}`);
   }
 }

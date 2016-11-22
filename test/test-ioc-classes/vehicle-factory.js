@@ -1,14 +1,17 @@
 export default class VehicleFactory {
-    // static VehicleFactory() {
-    //     switch (this.personality.toLowerCase()) {
-    //         case 'sporty': {
-    //             console.log(`${this.name} is driving a ${this.deps.sportsCar.drive()}`);
-    //             break;
-    //         }
-    //         case 'family': {
-    //             console.log(`${this.name} is driving a ${this.deps.familyCar.drive()}`);
-    //             break;
-    //         }
-    //     }
-    // }
+    static Create(personality) {
+        let vehicle;
+        switch (personality.toLowerCase()) {
+            case 'sporty': {
+                vehicle = this.deps.sportsCar;
+                break;
+            }
+            case 'family': {
+                vehicle = this.deps.familyCar;
+                break;
+            }
+        }
+
+        return vehicle;
+    }
 }

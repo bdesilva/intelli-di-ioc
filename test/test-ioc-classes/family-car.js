@@ -3,10 +3,10 @@ export class FamilyCar extends Vehicle {
         this.doors = doors;
         this.make = make;
         this.model = model;
-        super(bodyStyle);
+        super(bodyStyle, make, model);
     }
 
     relax() {
-        console.log(`You are driving really slow!`);
+        console.log(`You are driving really slow in your ${this.make} ${this.model}!`);
     }
 }

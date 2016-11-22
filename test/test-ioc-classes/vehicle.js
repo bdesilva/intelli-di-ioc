@@ -1,15 +1,24 @@
 export default class Vehicle {
-    constructor(bodyStyle) {
+    constructor(...args) {
+        const { bodyStyle, make, model } = args;
         this.isDriving = false;
         this.bodyStyle = bodyStyle;
+        this.make = make;
+        this.model = model;
     }
-    drive(make, model) {
+
+    get status() {
+        let status = (this.isDriving) ? 'started' : 'stopped';
+        console.log(`The ${this.make} ${this.model} has ${status} driving.`);
+    }
+
+    drive() {
         this.isDriving = true;
-        console.log(`The ${make} ${model} with a ${this.bodyStyle} started driving.`);
+        console.log(`The ${this.make} ${this.model} with a ${this.bodyStyle} is starting to drive.`);
     }
 
     park() {
-        this.isDriving = true;
-        console.log(`The ${make} ${model} with a ${this.bodyStyle} started driving.`);
+        this.isDriving = false;
+        console.log(`The ${this.make} ${this.model} with a ${this.bodyStyle} is parking the car.`);
     }
 }

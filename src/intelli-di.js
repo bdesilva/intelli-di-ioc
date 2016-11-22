@@ -1,7 +1,7 @@
 import React from 'react';
 import Helpers from './helpers';
 
-export class IntelliDI {
+export default class IntelliDI {
     constructor(dependencies) {
         this.deps = {};
         this.processDeps(dependencies);

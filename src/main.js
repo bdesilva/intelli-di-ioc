@@ -1,6 +1,7 @@
-import { IntelliDI } from './intelli-di-ioc';
+import IntelliDI from './intelli-di';
+import IntelliIoC from './intelli-ioc';
 
-class Main extends IntelliDI {
+class ExampleDI extends IntelliDI {
   runMethod() {
       console.log(this.deps);
       this.deps.test.runTest();
@@ -15,14 +16,27 @@ class Main extends IntelliDI {
   }
 }
 
-const main = new Main([
-    {file: '../test/test-classes/test-es6.js', name: 'Test'},
-    {file: '../test/test-classes/test-es6.js'},
-    {file: '../test/test-classes/test-es5.js'},
-    {file: '../test/test-classes/test-es6.js', name: 'AnotherClass'},
-    {file: '../test/test-classes/test-react-es6.js', name: 'TestReact'},
-    {file: '../test/test-classes/test-react-es6.js'},
-    {file: '../test/test-classes/test-react-es6-module.js'},
-    {file: '../test/test-classes/test-react-es5.js'}
+const exampleDI = new ExampleDI([
+    {file: '../test/test-di-classes/test-es6.js', name: 'Test'},
+    {file: '../test/test-di-classes/test-es6.js'},
+    {file: '../test/test-di-classes/test-es5.js'},
+    {file: '../test/test-di-classes/test-es6.js', name: 'AnotherClass'},
+    {file: '../test/test-di-classes/test-react-es6.js', name: 'TestReact'},
+    {file: '../test/test-di-classes/test-react-es6.js'},
+    {file: '../test/test-di-classes/test-react-es6-module.js'},
+    {file: '../test/test-di-classes/test-react-es5.js'}
 ]);
-main.runMethod();
+// exampleDI.runMethod();
+
+class ExampleIoC extends IntelliIoC {
+  runMethod() {
+      console.log(this.deps);    
+  }
+}
+
+const config = {
+    environment: 'prod',
+    recursive: true,
+    root: '../test/test-ioc-classes'
+};
+const exampleIoC = new ExampleIoC(config);

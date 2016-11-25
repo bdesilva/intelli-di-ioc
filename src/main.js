@@ -30,7 +30,7 @@ const exampleDI = new ExampleDI([
 
 class ExampleIoC extends IntelliIoC {
   runMethod() {
-      console.log(this.deps);    
+    //   console.log(this.deps);    
   }
 }
 

@@ -14,11 +14,17 @@ export default class IntelliIoC {
             : this.processDepsStatic(config.dependencies);
     }
 
+    instantiate(dep) {
+        Object.keys(dep).map(prop => {
+            
+        });
+    }
+
     /* Recursively walks through the specified tree and loads modules into memory */
     processDepsRecursive(path) {
         let resolvedPath = Path.resolve(__dirname, path);
         let files = FS.readdirSync(resolvedPath);
-        console.dir(files);
+        // console.dir(files);
         files.forEach(file => {
             let currentPath = Path.join(resolvedPath, file);
             if (FS.statSync(currentPath).isDirectory()) {

@@ -6,4 +6,8 @@ export default class Helpers {
                 return p1.toLowerCase();
             });
     }
+
+    static isClass(v) {
+        return typeof v === 'function' && /^\s*class\s+/.test(v.toString()) || /_class\S+/i.test(v.toString());
+    }
 }

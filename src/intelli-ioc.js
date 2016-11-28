@@ -1,3 +1,4 @@
+import Helpers from './helpers';
 import Path from 'path';
 import FS from 'fs';
 
@@ -15,9 +16,28 @@ export default class IntelliIoC {
     }
 
     instantiate(dep) {
-        Object.keys(dep).map(prop => {
-            
-        });
+        // Distinguish dep between object and function.
+        if (dep.constructor.name === 'Object') {
+            Object.keys(dep).map(prop => {            
+                // console.dir(dep[prop]);
+                // this.createDeps(dep[prop]);
+            });
+        } else if (dep.constructor.name === 'Function') {
+            this.createDeps(dep, Helpers.isClass(dep));
+        } else {
+            throw `${dep} is not of type Object or Function`;
+        }
+        
+    }
+
+    createDeps(dep, es6Class) {
+        if (es6Class) {
+            const instantiate = new Function('Dep', 'return new Dep();');
+            const instance = instantiate(dep);
+            this.deps[`${instance.constructor.name.toLowerCase()}`] = instance;
+        } else {
+            this.deps[`${dep.name.toLowerCase()}`] = dep;
+        }
     }
 
     /* Recursively walks through the specified tree and loads modules into memory */
@@ -30,8 +50,9 @@ export default class IntelliIoC {
             if (FS.statSync(currentPath).isDirectory()) {
                 this.processDepsRecursive(currentPath);
             } else {
-                const instDep = eval(`require("${currentPath}")`);
-                console.dir(instDep);
+                const instDep = eval(`require("${currentPath}")`);                
+                // console.dir(instDep);
+                this.instantiate(instDep);                
                 //TODO: Walk through individual classes (if existing) and build map of objects to instantiate.                
             }
         });

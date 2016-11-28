@@ -30,7 +30,10 @@ const exampleDI = new ExampleDI([
 
 class ExampleIoC extends IntelliIoC {
   runMethod() {
-    //   console.log(this.deps);    
+      console.dir(this.deps);
+      console.log(this.deps.es5testfunc1('Ben'));
+      this.deps.es6testclass.runTest('hi');
+      this.deps.es6testclass.printMe();
   }
 }
 
@@ -40,3 +43,4 @@ const config = {
     root: '../test/test-ioc-classes'
 };
 const exampleIoC = new ExampleIoC(config);
+exampleIoC.runMethod();

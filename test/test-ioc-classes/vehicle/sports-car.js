@@ -15,6 +15,6 @@ export class SportsCar extends Vehicle {
     }
 }
 
-module.exports = function turboCharge(make, model) {
+export function turboCharge(make, model) {
     return console.log(`${make} ${model} has been turbo charged!`);
 }

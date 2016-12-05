@@ -5,7 +5,8 @@ import FS from 'fs';
 export default class IntelliIoC {
     constructor(config) {
         this.deps = {};
-        this.environment = config.environment;
+        this.environment = {environment} = config;
+        this.classConfig = {classConfig} = config;
         this.processDeps(config);
     }
 
@@ -19,8 +20,8 @@ export default class IntelliIoC {
         // Distinguish dep between object and function.
         if (dep.constructor.name === 'Object') {
             Object.keys(dep).map(prop => {            
-                // console.dir(dep[prop]);
-                // this.createDeps(dep[prop]);
+                console.dir(dep[prop]);
+                this.createDeps(dep[prop], Helpers.isClass(dep[prop]));
             });
         } else if (dep.constructor.name === 'Function') {
             this.createDeps(dep, Helpers.isClass(dep));
@@ -32,6 +33,7 @@ export default class IntelliIoC {
 
     createDeps(dep, es6Class) {
         if (es6Class) {
+            //TODO: Iterate over class config and pass dependencies into constructor as needed.
             const instantiate = new Function('Dep', 'return new Dep();');
             const instance = instantiate(dep);
             this.deps[`${instance.constructor.name.toLowerCase()}`] = instance;
@@ -50,10 +52,9 @@ export default class IntelliIoC {
             if (FS.statSync(currentPath).isDirectory()) {
                 this.processDepsRecursive(currentPath);
             } else {
-                const instDep = eval(`require("${currentPath}")`);                
+                const instDep = eval(`require("${currentPath}")`);
                 // console.dir(instDep);
-                this.instantiate(instDep);                
-                //TODO: Walk through individual classes (if existing) and build map of objects to instantiate.                
+                this.instantiate(instDep);                                
             }
         });
     }

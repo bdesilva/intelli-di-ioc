@@ -40,7 +40,33 @@ class ExampleIoC extends IntelliIoC {
 const config = {
     environment: 'prod',
     recursive: true,
-    root: '../test/test-ioc-classes'
+    root: '../test/test-ioc-classes',
+    classConfig: {
+        Person: [
+            {
+                name: 'Ben', personality: {
+                    type: 'family',
+                    carOpts: {
+                        doors: 4,
+                        make: 'Subaru',
+                        model: 'WRX STi',
+                        bodyStyle: 'sedan'
+                    }
+                }
+            },
+            {
+                name: 'Jim', personality: {
+                    type: 'sports',
+                    carOpts: {
+                        doors: 2,
+                        make: 'Chevrolet',
+                        model: 'Corvette',
+                        bodyStyle: 'coupe'
+                    }
+                }
+            }
+        ]
+    }
 };
 const exampleIoC = new ExampleIoC(config);
 exampleIoC.runMethod();

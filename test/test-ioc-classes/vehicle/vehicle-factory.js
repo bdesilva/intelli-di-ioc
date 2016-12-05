@@ -1,13 +1,16 @@
+import { SportsCar } from './sports-car';
+import { FamilyCar } from './famiy-car';
+
 export default class VehicleFactory {
     static Create(personality) {
         let vehicle;
-        switch (personality.toLowerCase()) {
+        switch (personality.type.toLowerCase()) {
             case 'sporty': {
-                vehicle = this.deps.sportsCar;
+                vehicle = new SportsCar(...personality.carOpts);
                 break;
             }
             case 'family': {
-                vehicle = this.deps.familyCar;
+                vehicle = new FamilyCar(...personality.carOpts);
                 break;
             }
         }

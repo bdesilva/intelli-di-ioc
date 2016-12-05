@@ -1,8 +1,10 @@
+import VehicleFactory from './vehicle/vehicle-factory';
+
 export class Person {
   constructor(name, personality) {
     this.name = name;
     this.personality = personality;
-    this.vehicle = this.deps.vehicleFactory.Create(this.personality);
+    this.vehicle = VehicleFactory.Create(this.personality);
   }
 
   get drivingStatus() {
@@ -12,7 +14,7 @@ export class Person {
   driveVehicle() {    
     console.log(`${this.name} is driving a ${this.vehicle.drive()}`);
 
-    switch (this.personality.toLowerCase()) {
+    switch (this.personality.type.toLowerCase()) {
       case 'sporty': {
         this.vehicle.speed();
         break;

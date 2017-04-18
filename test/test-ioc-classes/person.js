@@ -4,7 +4,7 @@ export class Person {
   constructor(name, personality) {
     this.name = name;
     this.personality = personality;
-    this.vehicle = VehicleFactory.Create(this.personality);
+    this.vehicle = VehicleFactory.Create(personality);
   }
 
   get drivingStatus() {

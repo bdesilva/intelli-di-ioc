@@ -2,12 +2,19 @@ import Helpers from './helpers';
 import Path from 'path';
 import FS from 'fs';
 
+let cachedConfig;
+
 export default class IntelliIoC {
-    constructor(config) {
-        this.deps = {};
-        this.environment = {environment} = config;
-        this.classConfig = {classConfig} = config;
-        this.processDeps(config);
+    constructor(config, reset) {
+        if (!cachedConfig || reset) {
+            cachedConfig = config;
+        }
+
+        const {environment, classConfig} = cachedConfig;
+        this.deps = {};        
+        this.environment = environment;
+        this.classConfig = classConfig;
+        this.processDeps(cachedConfig);
     }
 
     processDeps(config) {
@@ -33,9 +40,11 @@ export default class IntelliIoC {
 
     createDeps(dep, es6Class) {
         if (es6Class) {
-            //TODO: Iterate over class config and pass dependencies into constructor as needed.
-            const instantiate = new Function('Dep', 'return new Dep();');
-            const instance = instantiate(dep);
+            //TODO: Iterate over class config and pass dependencies into constructor as needed.            
+            // console.log(`ES6 Object: ${dep.name}`);
+            // console.dir(this.classConfig.Person[0]);
+            const instantiate = new Function('Dep', 'deps_name', 'deps_personality', 'return new Dep(deps_name, deps_personality);');
+            const instance = instantiate(dep, this.classConfig.Person[0].name, this.classConfig.Person[0].personality);
             this.deps[`${instance.constructor.name.toLowerCase()}`] = instance;
         } else {
             this.deps[`${dep.name.toLowerCase()}`] = dep;

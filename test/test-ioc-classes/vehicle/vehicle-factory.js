@@ -1,5 +1,5 @@
 import { SportsCar } from './sports-car';
-import { FamilyCar } from './famiy-car';
+import { FamilyCar } from './family-car';
 
 export default class VehicleFactory {
     static Create(personality) {
